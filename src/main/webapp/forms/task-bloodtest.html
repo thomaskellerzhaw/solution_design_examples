@@ -1,0 +1,33 @@
+<strong>Recruitment Process</strong>
+
+<p>
+  You can use this form through Camunda Tasklist
+  by setting the formKey of a BPMN User Task to:
+  <code>embedded:app:forms/[name_of_file].html</code>
+</p>
+
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label">Blood test passed?</label>
+    <div class="controls">
+      <input type="checkbox"
+             cam-variable-name="bloodTestPassed"
+             cam-variable-type="Boolean"
+             name="bloodTestPassed"
+             class="form-control" />
+    </div>
+  <div class="control-group">
+    <label class="control-label">Sugar level within tolerance?</label>
+    <div class="controls">
+      <input type="checkbox"
+             cam-variable-name="sugarTestPassed"
+             cam-variable-type="Boolean"
+             name="sugarTestPassed"
+             class="form-control" />
+    </div>
+  </div>
+
+  <script cam-script type="text/form-script">
+  // custom JavaScript goes here
+  </script>
+</form>

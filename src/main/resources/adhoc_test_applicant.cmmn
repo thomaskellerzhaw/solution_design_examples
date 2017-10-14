@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cmmn:definitions xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:cmmn="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/cmmn" id="Test" targetNamespace="http://bpmn.io/schema/cmmn" exporter="Camunda Modeler" exporterVersion="1.9.0">
+  <cmmn:case id="Case_TestApplicant" name="test applicant">
+    <cmmn:casePlanModel id="CasePlanModel_TestApplicant" name="test applicant">
+      <cmmn:extensionElements>
+        <camunda:caseExecutionListener event="complete">
+          <camunda:script scriptFormat="javascript"><![CDATA[testStatus = false;
+testStatus = doctorTestPassed;
+execution.setVariable("testStatus", testStatus);]]></camunda:script>
+        </camunda:caseExecutionListener>
+      </cmmn:extensionElements>
+      <cmmn:planItem id="PlanItem_1" definitionRef="HumanTask_0za3ged">
+        <cmmn:itemControl id="PlanItemControl_1q78za4">
+          <cmmn:repetitionRule id="RepetitionRule_1gzvt7d">
+            <cmmn:condition id="Expression_1alt6ju">${!sugarTestPassed}</cmmn:condition>
+          </cmmn:repetitionRule>
+          <cmmn:requiredRule id="RequiredRule_08jd477" />
+        </cmmn:itemControl>
+      </cmmn:planItem>
+      <cmmn:planItem id="PlanItem_01gd47r" definitionRef="HumanTask_0zyjah6" />
+      <cmmn:planItem id="PlanItem_18puopj" definitionRef="HumanTask_18fjp57" />
+      <cmmn:sentry id="Sentry_0k6v8e1" />
+      <cmmn:sentry id="Sentry_147o2wz">
+        <cmmn:ifPart id="IfPart_1tf9g1z">
+          <cmmn:condition id="Expression_04nrrq4">doctorTestPassed</cmmn:condition>
+        </cmmn:ifPart>
+      </cmmn:sentry>
+      <cmmn:sentry id="Sentry_1bf9i1g">
+        <cmmn:ifPart id="IfPart_1ws5n98">
+          <cmmn:condition id="Expression_0w0t9xd">!bloodTestPassed || !hearingTestPassed || !visionTestPassed</cmmn:condition>
+        </cmmn:ifPart>
+      </cmmn:sentry>
+      <cmmn:sentry id="Sentry_1lxy1km">
+        <cmmn:ifPart id="IfPart_1c5ijuy">
+          <cmmn:condition id="Expression_1pecgcr">${!doctorExaminationPassed}</cmmn:condition>
+        </cmmn:ifPart>
+      </cmmn:sentry>
+      <cmmn:planningTable id="PlanningTable_16mmeps">
+        <cmmn:discretionaryItem id="PlanItem_1aahx3i" definitionRef="HumanTask_09cqsum">
+          <cmmn:entryCriterion id="EntryCriterion_0h8qnxd" sentryRef="Sentry_0k6v8e1" />
+        </cmmn:discretionaryItem>
+      </cmmn:planningTable>
+      <cmmn:humanTask id="HumanTask_0za3ged" name="blood" camunda:formKey="embedded:app:forms/task-bloodtest.html" />
+      <cmmn:humanTask id="HumanTask_0zyjah6" name="hearing" camunda:formKey="embedded:app:forms/task-hearingtest.html" />
+      <cmmn:humanTask id="HumanTask_18fjp57" name="vision" camunda:formKey="embedded:app:forms/task-visiontest.html" />
+      <cmmn:humanTask id="HumanTask_09cqsum" name="doctor examination" camunda:formKey="embedded:app:forms/task-doctortest.html" />
+      <cmmn:exitCriterion id="ExitCriterion_1ueidus" sentryRef="Sentry_147o2wz" />
+      <cmmn:exitCriterion id="ExitCriterion_1214n7q" sentryRef="Sentry_1bf9i1g" />
+      <cmmn:exitCriterion id="ExitCriterion_0doupl8" sentryRef="Sentry_1lxy1km" />
+    </cmmn:casePlanModel>
+  </cmmn:case>
+  <cmmn:association id="Association_06sxibc" sourceRef="ExitCriterion_1214n7q" targetRef="TextAnnotation_0b97zba" />
+  <cmmn:textAnnotation id="TextAnnotation_0b97zba">  <cmmn:text>any test not passed</cmmn:text>
+</cmmn:textAnnotation>
+  <cmmn:association id="Association_14ohc7n" sourceRef="ExitCriterion_1ueidus" targetRef="TextAnnotation_0v88x8l" />
+  <cmmn:textAnnotation id="TextAnnotation_0v88x8l">  <cmmn:text>doctor examination passed</cmmn:text>
+</cmmn:textAnnotation>
+  <cmmn:textAnnotation id="TextAnnotation_19q9upp">  <cmmn:text>doctor examination not passed</cmmn:text>
+</cmmn:textAnnotation>
+  <cmmn:association id="Association_02lcc18" sourceRef="ExitCriterion_0doupl8" targetRef="TextAnnotation_19q9upp" />
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="_5a66685b-5f57-4e2f-b1d1-acca4fae04b2">
+      <cmmndi:Size xsi:type="dc:Dimension" width="500" height="500" />
+      <cmmndi:CMMNShape id="DI_CasePlanModel_1" cmmnElementRef="CasePlanModel_TestApplicant">
+        <dc:Bounds x="114" y="63" width="534" height="389" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="PlanItem_0o1o5iy_di" cmmnElementRef="PlanItem_1">
+        <dc:Bounds x="150" y="96" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="PlanItem_01wpzxp_di" cmmnElementRef="PlanItem_01gd47r">
+        <dc:Bounds x="315" y="96" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="PlanItem_0tu8gju_di" cmmnElementRef="PlanItem_18puopj">
+        <dc:Bounds x="482" y="96" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="EntryCriterion_0h8qnxd_di" cmmnElementRef="EntryCriterion_0h8qnxd">
+        <dc:Bounds x="355" y="267" width="20" height="28" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="ExitCriterion_1ueidus_di" cmmnElementRef="ExitCriterion_1ueidus">
+        <dc:Bounds x="638" y="307" width="20" height="28" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="DiscretionaryItem_1hbtzc9_di" cmmnElementRef="PlanItem_1aahx3i">
+        <dc:Bounds x="315" y="281" width="100" height="80" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="ExitCriterion_1214n7q_di" cmmnElementRef="ExitCriterion_1214n7q">
+        <dc:Bounds x="638" y="214" width="20" height="28" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="TextAnnotation_0b97zba_di" cmmnElementRef="TextAnnotation_0b97zba">
+        <dc:Bounds x="723" y="141" width="100" height="30" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNEdge id="Association_06sxibc_di" cmmnElementRef="Association_06sxibc">
+        <di:waypoint xsi:type="dc:Point" x="658" y="228" />
+        <di:waypoint xsi:type="dc:Point" x="691" y="228" />
+        <di:waypoint xsi:type="dc:Point" x="691" y="156" />
+        <di:waypoint xsi:type="dc:Point" x="723" y="156" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNEdge>
+      <cmmndi:CMMNShape id="TextAnnotation_0v88x8l_di" cmmnElementRef="TextAnnotation_0v88x8l">
+        <dc:Bounds x="723" y="262" width="100" height="30" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNEdge id="Association_14ohc7n_di" cmmnElementRef="Association_14ohc7n">
+        <di:waypoint xsi:type="dc:Point" x="658" y="321" />
+        <di:waypoint xsi:type="dc:Point" x="680" y="321" />
+        <di:waypoint xsi:type="dc:Point" x="680" y="277" />
+        <di:waypoint xsi:type="dc:Point" x="723" y="277" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNEdge>
+      <cmmndi:CMMNShape id="ExitCriterion_0doupl8_di" cmmnElementRef="ExitCriterion_0doupl8">
+        <dc:Bounds x="638" y="375" width="20" height="28" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="TextAnnotation_19q9upp_di" cmmnElementRef="TextAnnotation_19q9upp">
+        <dc:Bounds x="723" y="350" width="100" height="30" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNShape>
+      <cmmndi:CMMNEdge id="Association_02lcc18_di" cmmnElementRef="Association_02lcc18">
+        <di:waypoint xsi:type="dc:Point" x="658" y="389" />
+        <di:waypoint xsi:type="dc:Point" x="691" y="389" />
+        <di:waypoint xsi:type="dc:Point" x="691" y="365" />
+        <di:waypoint xsi:type="dc:Point" x="723" y="365" />
+        <cmmndi:CMMNLabel />
+      </cmmndi:CMMNEdge>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</cmmn:definitions>

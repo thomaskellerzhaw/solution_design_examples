@@ -1,0 +1,24 @@
+<strong>Recruitment Process</strong>
+
+<p>
+  You can use this form through Camunda Tasklist
+  by setting the formKey of a BPMN User Task to:
+  <code>embedded:app:forms/[name_of_file].html</code>
+</p>
+
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label">Mental exam passed?</label>
+    <div class="controls">
+      <input type="checkbox"
+             cam-variable-name="mentalExamPassed"
+             cam-variable-type="Boolean"
+             name="mentalExamPassed"
+             class="form-control" />
+    </div>
+  </div>
+
+  <script cam-script type="text/form-script">
+  // custom JavaScript goes here
+  </script>
+</form>

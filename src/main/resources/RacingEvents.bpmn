@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.9.0">
+  <bpmn:process id="RacingEvents" name="Racing Events Examle Process" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="StartEvent_1" name="every thursday at noon">
+      <bpmn:extensionElements>
+        <camunda:formData businessKey="businessKey">
+          <camunda:formField id="businessKey" label="business key" type="string" defaultValue="777" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_15qd325</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 0 12 ? * THU</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_15qd325" sourceRef="StartEvent_1" targetRef="Task_1qqj0jf" />
+    <bpmn:serviceTask id="Task_1qqj0jf" name="generate replenishment order" camunda:class="ch.zhaw.solution_design_examples.delegates.PrintVariables">
+      <bpmn:incoming>SequenceFlow_15qd325</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0vprhuw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0vprhuw" sourceRef="Task_1qqj0jf" targetRef="IntermediateThrowEvent_0t3zkjd" />
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0t3zkjd" name="replenishment order sent">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="from">camunda@zhaw.ch</camunda:inputParameter>
+          <camunda:inputParameter name="to">replenish@someone.me</camunda:inputParameter>
+          <camunda:inputParameter name="subject">Replenishment Order</camunda:inputParameter>
+          <camunda:inputParameter name="message">please find replenishment order .....</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0vprhuw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_04ztfn1</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_1arnxpo" camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_04ztfn1" sourceRef="IntermediateThrowEvent_0t3zkjd" targetRef="ExclusiveGateway_1oes5lu" />
+    <bpmn:eventBasedGateway id="ExclusiveGateway_1oes5lu">
+      <bpmn:incoming>SequenceFlow_04ztfn1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1cf0y5f</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1vkqqjs</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_09z3pq7</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_128av0x" name="order response received">
+      <bpmn:incoming>SequenceFlow_1cf0y5f</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0m301n9</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_1xo3vx7" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1cf0y5f" sourceRef="ExclusiveGateway_1oes5lu" targetRef="IntermediateCatchEvent_128av0x" />
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_1xzaigw" name="error message received">
+      <bpmn:incoming>SequenceFlow_1vkqqjs</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1gxmpbd</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_19ixn1f" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1vkqqjs" sourceRef="ExclusiveGateway_1oes5lu" targetRef="IntermediateCatchEvent_1xzaigw" />
+    <bpmn:intermediateCatchEvent id="IntermediateCatchEvent_1e1896t" name="every friday at 4pm">
+      <bpmn:incoming>SequenceFlow_09z3pq7</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1wadxj2</bpmn:outgoing>
+      <bpmn:timerEventDefinition>
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">0 0 16 ? * FRI</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_09z3pq7" sourceRef="ExclusiveGateway_1oes5lu" targetRef="IntermediateCatchEvent_1e1896t" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_01xwnhl">
+      <bpmn:incoming>SequenceFlow_1gxmpbd</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1wadxj2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_19fb6yi</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1gxmpbd" sourceRef="IntermediateCatchEvent_1xzaigw" targetRef="ExclusiveGateway_01xwnhl" />
+    <bpmn:sequenceFlow id="SequenceFlow_1wadxj2" sourceRef="IntermediateCatchEvent_1e1896t" targetRef="ExclusiveGateway_01xwnhl" />
+    <bpmn:sequenceFlow id="SequenceFlow_19fb6yi" sourceRef="ExclusiveGateway_01xwnhl" targetRef="Task_0unvvsq" />
+    <bpmn:scriptTask id="Task_0unvvsq" name="compile notice for purchaseing officer" scriptFormat="javascript" camunda:resultVariable="failureMessage">
+      <bpmn:incoming>SequenceFlow_19fb6yi</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0dn0gme</bpmn:outgoing>
+      <bpmn:script><![CDATA["replenishment order failed";]]></bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0dn0gme" sourceRef="Task_0unvvsq" targetRef="IntermediateThrowEvent_0s7trpb" />
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0s7trpb" name="notification sent">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="from">camunda@zhaw.ch</camunda:inputParameter>
+          <camunda:inputParameter name="to">replenish@someone.me</camunda:inputParameter>
+          <camunda:inputParameter name="subject">Replenishment Order Failed Notification</camunda:inputParameter>
+          <camunda:inputParameter name="message">Please be notified that the replenishment order failed ....</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0dn0gme</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1uzl016</bpmn:outgoing>
+      <bpmn:messageEventDefinition messageRef="Message_0xigz6s" camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="EndEvent_0nului6">
+      <bpmn:incoming>SequenceFlow_0m301n9</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1uzl016</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0m301n9" sourceRef="IntermediateCatchEvent_128av0x" targetRef="EndEvent_0nului6" />
+    <bpmn:sequenceFlow id="SequenceFlow_1uzl016" sourceRef="IntermediateThrowEvent_0s7trpb" targetRef="EndEvent_0nului6" />
+  </bpmn:process>
+  <bpmn:message id="Message_1arnxpo" name="ReplenishmentOrder" />
+  <bpmn:message id="Message_1xo3vx7" name="ReplenishmentOrderReceived" />
+  <bpmn:message id="Message_19ixn1f" name="ReplenishmentOrderError" />
+  <bpmn:message id="Message_0xigz6s" name="ReplenishmentOrderFailedNotification" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="RacingEvents">
+      <bpmndi:BPMNShape id="StartEvent_14w5hey_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="176" y="283" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="107" y="319" width="87" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_15qd325_di" bpmnElement="SequenceFlow_15qd325">
+        <di:waypoint xsi:type="dc:Point" x="212" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="279" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="245.5" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0u9jlok_di" bpmnElement="Task_1qqj0jf">
+        <dc:Bounds x="279" y="261" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0vprhuw_di" bpmnElement="SequenceFlow_0vprhuw">
+        <di:waypoint xsi:type="dc:Point" x="379" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="439" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="409" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateThrowEvent_1peimxn_di" bpmnElement="IntermediateThrowEvent_0t3zkjd">
+        <dc:Bounds x="439" y="283" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="423" y="323" width="69" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_04ztfn1_di" bpmnElement="SequenceFlow_04ztfn1">
+        <di:waypoint xsi:type="dc:Point" x="475" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="529" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="502" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EventBasedGateway_0imp83m_di" bpmnElement="ExclusiveGateway_1oes5lu">
+        <dc:Bounds x="529" y="276" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="554" y="330" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_128av0x_di" bpmnElement="IntermediateCatchEvent_128av0x">
+        <dc:Bounds x="655" y="184" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="637" y="224" width="75" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1cf0y5f_di" bpmnElement="SequenceFlow_1cf0y5f">
+        <di:waypoint xsi:type="dc:Point" x="554" y="276" />
+        <di:waypoint xsi:type="dc:Point" x="554" y="202" />
+        <di:waypoint xsi:type="dc:Point" x="655" y="202" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="569" y="233" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_1xzaigw_di" bpmnElement="IntermediateCatchEvent_1xzaigw">
+        <dc:Bounds x="655" y="283" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="638" y="323" width="72" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vkqqjs_di" bpmnElement="SequenceFlow_1vkqqjs">
+        <di:waypoint xsi:type="dc:Point" x="579" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="655" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="617" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_1e1896t_di" bpmnElement="IntermediateCatchEvent_1e1896t">
+        <dc:Bounds x="655" y="390" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="638" y="430" width="71" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_09z3pq7_di" bpmnElement="SequenceFlow_09z3pq7">
+        <di:waypoint xsi:type="dc:Point" x="554" y="326" />
+        <di:waypoint xsi:type="dc:Point" x="554" y="408" />
+        <di:waypoint xsi:type="dc:Point" x="655" y="408" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="569" y="361" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_01xwnhl_di" bpmnElement="ExclusiveGateway_01xwnhl" isMarkerVisible="true">
+        <dc:Bounds x="785" y="276" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="810" y="330" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1gxmpbd_di" bpmnElement="SequenceFlow_1gxmpbd">
+        <di:waypoint xsi:type="dc:Point" x="691" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="785" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="738" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1wadxj2_di" bpmnElement="SequenceFlow_1wadxj2">
+        <di:waypoint xsi:type="dc:Point" x="691" y="408" />
+        <di:waypoint xsi:type="dc:Point" x="810" y="408" />
+        <di:waypoint xsi:type="dc:Point" x="810" y="326" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="750.5" y="387" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_19fb6yi_di" bpmnElement="SequenceFlow_19fb6yi">
+        <di:waypoint xsi:type="dc:Point" x="835" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="888" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="861.5" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0lh8fxi_di" bpmnElement="Task_0unvvsq">
+        <dc:Bounds x="888" y="261" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0dn0gme_di" bpmnElement="SequenceFlow_0dn0gme">
+        <di:waypoint xsi:type="dc:Point" x="988" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="1038" y="301" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1013" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateThrowEvent_1knl5k5_di" bpmnElement="IntermediateThrowEvent_0s7trpb">
+        <dc:Bounds x="1038" y="283" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1019" y="323" width="76" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_0nului6_di" bpmnElement="EndEvent_0nului6">
+        <dc:Bounds x="1132" y="184" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1150" y="224" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0m301n9_di" bpmnElement="SequenceFlow_0m301n9">
+        <di:waypoint xsi:type="dc:Point" x="691" y="202" />
+        <di:waypoint xsi:type="dc:Point" x="1132" y="202" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="911.5" y="181" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1uzl016_di" bpmnElement="SequenceFlow_1uzl016">
+        <di:waypoint xsi:type="dc:Point" x="1074" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="1150" y="301" />
+        <di:waypoint xsi:type="dc:Point" x="1150" y="220" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1112" y="280" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
