@@ -60,8 +60,10 @@
     </bpmn:intermediateThrowEvent>
     <bpmn:callActivity id="Task_0t7tb9g" name="sit exam" camunda:caseRef="Case_Sit_Exam">
       <bpmn:extensionElements>
-        <camunda:in variables="all" />
-        <camunda:out variables="all" />
+        <camunda:in sourceExpression="${false}" target="physicalExamPassed" />
+        <camunda:in sourceExpression="${false}" target="mentalExamPassed" />
+        <camunda:in sourceExpression="${false}" target="interviewPassed" />
+        <camunda:out sourceExpression="${interviewPassed}" target="interviewPassed" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1v6xo9v</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_19i2scf</bpmn:outgoing>
@@ -87,12 +89,12 @@
     <bpmn:sequenceFlow id="SequenceFlow_0cyyq4s" sourceRef="Task_15r6er7" targetRef="Task_05kcafo" />
     <bpmn:sequenceFlow id="SequenceFlow_1mem7v2" sourceRef="Task_05kcafo" targetRef="ExclusiveGateway_0vfj2fx" />
     <bpmn:sequenceFlow id="SequenceFlow_1ver1w6" sourceRef="ExclusiveGateway_0vfj2fx" targetRef="Task_05sst11">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${testStatus}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${doctorTestPassed}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0uezrb7" sourceRef="Task_05sst11" targetRef="IntermediateThrowEvent_0w8vlrq" />
     <bpmn:sequenceFlow id="SequenceFlow_1v6xo9v" sourceRef="IntermediateThrowEvent_0w8vlrq" targetRef="Task_0t7tb9g" />
     <bpmn:sequenceFlow id="SequenceFlow_00yxbws" sourceRef="ExclusiveGateway_0vfj2fx" targetRef="EndEvent_0du8gvr">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!testStatus}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!doctorTestPassed}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0mdt9dz">
       <bpmn:incoming>SequenceFlow_19i2scf</bpmn:incoming>
@@ -101,7 +103,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_19i2scf" sourceRef="Task_0t7tb9g" targetRef="ExclusiveGateway_0mdt9dz" />
     <bpmn:sequenceFlow id="SequenceFlow_0usujdf" sourceRef="ExclusiveGateway_0mdt9dz" targetRef="Task_1nn94c4">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${examStatus}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${interviewPassed}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="Task_1nn94c4" name="recruit applicant">
       <bpmn:extensionElements>
@@ -123,7 +125,7 @@
       <bpmn:outgoing>SequenceFlow_0xlzm1a</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_1abwrck" sourceRef="ExclusiveGateway_0mdt9dz" targetRef="EndEvent_08xofcd">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!examStatus}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!interviewPassed}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_08xofcd">
       <bpmn:incoming>SequenceFlow_1abwrck</bpmn:incoming>
@@ -135,8 +137,12 @@
     <bpmn:sequenceFlow id="SequenceFlow_0xlzm1a" sourceRef="Task_1nn94c4" targetRef="EndEvent_0x2553m" />
     <bpmn:callActivity id="Task_05kcafo" name="test applicant" camunda:caseRef="Case_TestApplicant">
       <bpmn:extensionElements>
-        <camunda:out variables="all" />
-        <camunda:in variables="all" />
+        <camunda:in sourceExpression="${false}" target="bloodTestPassed" />
+        <camunda:in source="${false}" target="sugarTestPassed" />
+        <camunda:in source="${false}" target="hearingTestPassed" />
+        <camunda:in source="${false}" target="visionTestPassed" />
+        <camunda:in source="${false}" target="doctorTestPassed" />
+        <camunda:out sourceExpression="${doctorTestPassed}" target="doctorTestPassed" />
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0cyyq4s</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1mem7v2</bpmn:outgoing>
