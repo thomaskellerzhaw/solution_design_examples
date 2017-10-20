@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.9.0">
   <bpmn:collaboration id="Collaboration_0u3omcm">
-    <bpmn:participant id="Participant_10uierp" name="Recruitment Process" processRef="RecruitmentProcess" />
+    <bpmn:participant id="Participant_10uierp" name="Army Recruitment Process" processRef="ArmyRecruitmentProcess" />
     <bpmn:participant id="Participant_0cpjuka" name="applicant" />
     <bpmn:messageFlow id="MessageFlow_0qy7ki5" sourceRef="EndEvent_0du8gvr" targetRef="Participant_0cpjuka" />
     <bpmn:messageFlow id="MessageFlow_0l6mcsk" sourceRef="EndEvent_08xofcd" targetRef="Participant_0cpjuka" />
     <bpmn:messageFlow id="MessageFlow_066r8hx" sourceRef="IntermediateThrowEvent_0w8vlrq" targetRef="Participant_0cpjuka" />
   </bpmn:collaboration>
-  <bpmn:process id="RecruitmentProcess" name="Recruitment Process" isExecutable="true" camunda:versionTag="1.0.0">
+  <bpmn:process id="ArmyRecruitmentProcess" name="Army Recruitment Process" isExecutable="true" camunda:versionTag="1.0.0">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:extensionElements>
         <camunda:formData businessKey="applicantId">
@@ -56,7 +56,7 @@
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0uezrb7</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1v6xo9v</bpmn:outgoing>
-      <bpmn:messageEventDefinition camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
+      <bpmn:messageEventDefinition messageRef="Message_062t6xf" camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
     </bpmn:intermediateThrowEvent>
     <bpmn:callActivity id="Task_0t7tb9g" name="sit exam" camunda:caseRef="Case_Sit_Exam">
       <bpmn:extensionElements>
@@ -128,8 +128,16 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!interviewPassed}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_08xofcd">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="from">kell@zhaw.ch</camunda:inputParameter>
+          <camunda:inputParameter name="to">${participantMail}</camunda:inputParameter>
+          <camunda:inputParameter name="subject">Your exam dates</camunda:inputParameter>
+          <camunda:inputParameter name="message">Your exam dates are ...</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1abwrck</bpmn:incoming>
-      <bpmn:messageEventDefinition />
+      <bpmn:messageEventDefinition messageRef="Message_0yj0p87" camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_0x2553m">
       <bpmn:incoming>SequenceFlow_0xlzm1a</bpmn:incoming>
@@ -149,6 +157,8 @@
     </bpmn:callActivity>
   </bpmn:process>
   <bpmn:message id="Message_0yj0p87" name="ApplicationRejected" />
+  <bpmn:message id="Message_1dekbih" />
+  <bpmn:message id="Message_062t6xf" name="ExamDates" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0u3omcm">
       <bpmndi:BPMNShape id="Participant_10uierp_di" bpmnElement="Participant_10uierp">

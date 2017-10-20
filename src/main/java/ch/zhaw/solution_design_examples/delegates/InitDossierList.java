@@ -5,6 +5,8 @@
  */
 package ch.zhaw.solution_design_examples.delegates;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -13,20 +15,12 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
  *
  * @author kell
  */
-public class PrintVariables implements JavaDelegate{
+public class InitDossierList implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution de) throws Exception {
-        System.out.println("JavaDelegate printing local variables");
-        Map<String,Object> vars = de.getVariablesLocal();
-        for(Map.Entry<String,Object> entry : vars.entrySet()){
-            System.out.println(entry.getKey()+": "+entry.getValue());
-        }
-        System.out.println("JavaDelegate printing global variables");
-        vars = de.getVariables();
-        for(Map.Entry<String,Object> entry : vars.entrySet()){
-            System.out.println(entry.getKey()+": "+entry.getValue());
-        }
+        List<Map> dossiers = new ArrayList<Map>();
+        de.setVariable("dossiers", dossiers);
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

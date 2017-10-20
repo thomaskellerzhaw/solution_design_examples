@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.9.0">
+  <bpmn:process id="OpeningBellRinging" name="OpeningBellRinging" isExecutable="true" camunda:versionTag="1.0.0">
+    <bpmn:startEvent id="StartEvent_1" name="OpeningBellRinging">
+      <bpmn:extensionElements>
+        <camunda:formData businessKey="triggerId">
+          <camunda:formField id="triggerId" type="string" defaultValue="stop" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1h0ei98</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1h0ei98" sourceRef="StartEvent_1" targetRef="EndEvent_19utr8r" />
+    <bpmn:endEvent id="EndEvent_19utr8r" name="OpeningBellRinging">
+      <bpmn:incoming>SequenceFlow_1h0ei98</bpmn:incoming>
+      <bpmn:signalEventDefinition signalRef="Signal_0xxgazg" />
+    </bpmn:endEvent>
+  </bpmn:process>
+  <bpmn:signal id="Signal_0xxgazg" name="OpeningBellRinging" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="OpeningBellRinging">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="167" y="200" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="144" y="236" width="83" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1h0ei98_di" bpmnElement="SequenceFlow_1h0ei98">
+        <di:waypoint xsi:type="dc:Point" x="203" y="218" />
+        <di:waypoint xsi:type="dc:Point" x="317" y="218" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="260" y="197" width="0" height="12" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_05sqi8z_di" bpmnElement="EndEvent_19utr8r">
+        <dc:Bounds x="317" y="200" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="294" y="240" width="83" height="24" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

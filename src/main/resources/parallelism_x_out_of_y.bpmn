@@ -44,7 +44,7 @@
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_14y0wf5</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0qodf9g</bpmn:outgoing>
-      <bpmn:messageEventDefinition camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
+      <bpmn:messageEventDefinition messageRef="Message_00jueyz" camunda:class="ch.zhaw.solution_design_examples.delegates.SendMail" />
     </bpmn:intermediateThrowEvent>
     <bpmn:sequenceFlow id="SequenceFlow_17d6nx8" sourceRef="StartEvent_1" targetRef="Task_12fyqqb" />
     <bpmn:sequenceFlow id="SequenceFlow_14y0wf5" sourceRef="Task_12fyqqb" targetRef="IntermediateThrowEvent_0mqp87m" />
@@ -115,6 +115,7 @@
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmn:message id="Message_06l08jp" name="WitnessReport" />
+  <bpmn:message id="Message_00jueyz" name="WitnessReportForm" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1jcpiti">
       <bpmndi:BPMNShape id="Participant_1jm3m4q_di" bpmnElement="Participant">

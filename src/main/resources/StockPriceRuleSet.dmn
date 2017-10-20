@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_1h3efrw" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="stock-price-ruleset" name="StockPriceRuleSet">
+    <extensionElements>
+      <biodi:bounds x="363" y="127" width="180" height="80" />
+    </extensionElements>
+    <decisionTable id="DecisionTable_0p0ykn5">
+      <input id="InputClause_0ds0evw" label="stock price evaluation" camunda:inputVariable="">
+        <inputExpression id="LiteralExpression_12k43i8" typeRef="double">        <text>${stockPriceInitial - stockPriceActual}</text>
+</inputExpression>
+      </input>
+      <output id="OutputClause_0ziqm7x" label="evaluation" name="result" typeRef="string">
+        <outputValues id="UnaryTests_064lvh8">        <text><![CDATA["raising","falling","stalling"]]></text>
+</outputValues>
+      </output>
+      <rule id="row-735234580-4">
+        <description>stock price raised since opening bell ringing</description>
+        <inputEntry id="UnaryTests_1szozel">        <text><![CDATA[<0]]></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_0a5lwiy">        <text><![CDATA["raising"]]></text>
+</outputEntry>
+      </rule>
+      <rule id="row-735234580-5">
+        <description>stock price fallen since opening bell ringing</description>
+        <inputEntry id="UnaryTests_1ltk0ui">        <text><![CDATA[>0]]></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_11tmjy2">        <text><![CDATA["falling"]]></text>
+</outputEntry>
+      </rule>
+      <rule id="row-735234580-6">
+        <description>stock price stalled since opening bell ringing</description>
+        <inputEntry id="UnaryTests_1styvn3">        <text>0</text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_15asyoj">        <text><![CDATA["stalling"]]></text>
+</outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>

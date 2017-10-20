@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_14s3uwt" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="DossierCheck" name="Dossier Check">
+    <decisionTable id="decisionTable" hitPolicy="FIRST">
+      <input id="input1" label="" camunda:inputVariable="">
+        <inputExpression id="inputExpression1" typeRef="double">        <text>random</text>
+</inputExpression>
+      </input>
+      <output id="output1" label="" name="result" typeRef="boolean" />
+      <rule id="row-514395600-1">
+        <inputEntry id="UnaryTests_0djl4g7">        <text><![CDATA[<0.5]]></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_08i2s74">        <text>true</text>
+</outputEntry>
+      </rule>
+      <rule id="row-514395600-2">
+        <inputEntry id="UnaryTests_05eoxs0">        <text></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_1okid5r">        <text>false</text>
+</outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
