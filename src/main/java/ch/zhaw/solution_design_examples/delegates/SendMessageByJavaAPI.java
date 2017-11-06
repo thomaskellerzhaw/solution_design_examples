@@ -5,12 +5,12 @@
  */
 package ch.zhaw.solution_design_examples.delegates;
 
+import ch.zhaw.solution_design_examples.exceptions.SendMessageException;
 import java.util.HashMap;
 import java.util.Map;
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.model.bpmn.instance.EndEvent;
-import org.camunda.bpm.model.xml.ModelInstance;
 
 /**
  *
@@ -25,40 +25,37 @@ public class SendMessageByJavaAPI implements JavaDelegate {
         System.out.println("messageName: Name of receiving message event");
         System.out.println("businessKey: businessKey of new instance or waiting instance");
         System.out.println("messageBody: a Map of variables");
-        boolean abort=false;
+        System.out.println("throws BpmnError 'SendMessageException'");
         String messageName, businessKey;
         Map<String,Object> messageBody;
-        if(de.hasVariableLocal("messageName")){
-            messageName = (String) de.getVariableLocal("messageName");
-        } else {
-            messageName="";
-            System.out.println("SendMessageByJavaAPI: Sending message failed due to missing messageName");
-            abort=true;
-        }
-        if(de.hasVariableLocal("businessKey")){
-            businessKey = (String) de.getVariableLocal("businessKey");
-        } else {
-            businessKey = "";
-            System.out.println("SendMessageByJavaAPI: Sending message failed due to missing businessKey");
-            abort=true;
-        }
-        if(de.hasVariableLocal("messageBody")){
-            messageBody = (Map<String, Object>) de.getVariableLocal("messageBody");
-        } else {
-            System.out.println("SendMessageByJavaAPI: Sending message with no messageBody");
-            messageBody = new HashMap<String,Object>();
-        }
         try{
-            if(!abort){
-                de.getProcessEngineServices().getRuntimeService()
-                        .startProcessInstanceByMessage(messageName, businessKey, messageBody);
+            if(de.hasVariableLocal("messageName")){
+                messageName = (String) de.getVariableLocal("messageName");
+            } else {
+                messageName="";
+                System.out.println("SendMessageByJavaAPI: Sending message failed due to missing messageName");
+                throw new SendMessageException("Missing local variable 'messageName'");
             }
+            if(de.hasVariableLocal("businessKey")){
+                businessKey = (String) de.getVariableLocal("businessKey");
+            } else {
+                businessKey = "";
+                System.out.println("SendMessageByJavaAPI: Sending message failed due to missing businessKey");
+                throw new SendMessageException("Missing local variable 'businessKey'");
+            }
+            if(de.hasVariableLocal("messageBody")){
+                messageBody = (Map<String, Object>) de.getVariableLocal("messageBody");
+            } else {
+                System.out.println("SendMessageByJavaAPI: Sending message with no messageBody");
+                messageBody = new HashMap<String,Object>();
+            }
+        } catch (SendMessageException ex){
+            throw new BpmnError("SendMessageException", ex.getMessage());
         } catch (Exception ex) {
             System.out.println("SendMessageByJavaAPI: sending message failed");
             System.out.println(ex.getMessage());
-            de.setVariable("sendMessageByJavaAPIError",false);
+            throw new BpmnError("SendMessageException", ex.getMessage());
         }
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
